@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import SignInPage from "./pages/SignInPage/SignInPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import HomeUserPage from "./pages/HomeUserPage/HomeUserPage";
+import CreatePage from "./pages/CreatePage/CreatePage";
 
 export default function App() {
   return (
@@ -16,7 +17,7 @@ export default function App() {
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
           <Route path="/home-user" element={<HomeUserPage />} />
-       
+          <Route path="/create-post" element={<CreatePage />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

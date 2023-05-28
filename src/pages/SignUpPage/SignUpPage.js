@@ -8,7 +8,8 @@ import { LoadingThreeDots } from "../../components/Loading/Loading";
 import { FormStyled, InputStyled, ButtonStyled, Error } from "../../components/Sign/SignForm";
 
 export default function SignUpPage() {
-    const [registrationData, setRegistrationData] = useState({ name: "", userName: "", email: "", password: "", confirmPassword: "" });
+    const [registrationData, setRegistrationData] = useState({ name: "", userName: "", biography: "", email: "", password: "", confirmPassword: "" });
+    const [picture, setPicture] = useState();
     const [request, setRequest] = useState(false);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
@@ -32,8 +33,16 @@ export default function SignUpPage() {
         }
 
         const url = process.env.REACT_APP_SIGN_UP_URL;
+        const formData = new FormData();
+        formData.append('name', registrationData.name);
+        formData.append('userName', registrationData.userName);
+        formData.append('biography', registrationData.biography);
+        formData.append('photo', picture);
+        formData.append('email', registrationData.email);
+        formData.append('password', registrationData.password);
+        formData.append('confirmPassword', registrationData.confirmPassword);
 
-        axios.post(url, registrationData)
+        axios.post(url, formData)
             .then(sucess => {
                 setRequest(false);
                 navigate("/sign-in");
@@ -53,7 +62,7 @@ export default function SignUpPage() {
     return (
         <>
             <ContainerSign>
-                <FormStyled onSubmit={signUp}>
+                <FormStyled action="/signup" method="POST" encType="multipart/form-data" onSubmit={signUp}>
                     <InputStyled
                         placeholder="Nome"
                         type="text"
@@ -69,6 +78,26 @@ export default function SignUpPage() {
                         required
                         onChange={insertRegistrationData}
                         onInvalid={(event) => event.target.setCustomValidity('Preencha este campo.')}
+                    />
+                    <InputStyled
+                        placeholder="Biografia"
+                        type="text"
+                        name="biography"
+                        required
+                        onChange={insertRegistrationData}
+                        onInvalid={(event) => event.target.setCustomValidity('Por favor, preencha este campo.')}
+                    />
+                     <InputStyled
+                        placeholder="Foto de perfil"
+                        type="file"
+                        accept="image/png,image/jpeg"
+                        name="photo"
+                        required
+                        onChange={(e)=>{
+                            e.target.setCustomValidity('');
+                            setPicture(e.target.files[0]);
+                        }}
+                        onInvalid={(event) => event.target.setCustomValidity('Por favor, preencha este campo.')}
                     />
                     <InputStyled
                         placeholder="E-mail"
