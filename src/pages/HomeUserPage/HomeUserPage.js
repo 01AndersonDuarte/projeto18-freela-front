@@ -1,33 +1,38 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { LoadingCircle } from "../../components/Loading/Loading";
-import { ContainerHomeUser, ContainerPosts, PostImage, PostFrame, PostInfo } from "./HomeUserStyle";
+import { ContainerHomeUser } from "./HomeUserStyle";
 import HeaderUser from "../../components/Profile/HeaderUser";
-import dayjs from "dayjs";
+import ContainerPosts from "../../components/Profile/ContainerPosts";
+import Header from "../../components/Header/Header";
 
 export default function HomeUserPage() {
     const [userProfile, setUserProfile] = useState(null);
     const [userPosts, setUserPosts] = useState(null);
+    const [profileId, setProfileId] = useState(null);
+    const { id } = useParams();
 
-    const { auth, login } = useAuth();
+    const { auth } = useAuth();
     const navigate = useNavigate();
     const config = auth && { headers: { Authorization: `Bearer ${auth.token}` } };
 
     useEffect(() => {
+        setUserProfile(null);
         if (!auth) {
             navigate("/");
         }
-        const url = process.env.REACT_APP_GET_USER_DATA;
+        const url = `${process.env.REACT_APP_GET_USER_DATA}${id}`;
         axios.get(url, config).then((sucess) => {
             setUserProfile(sucess.data.profile);
             setUserPosts(sucess.data.posts);
+            setProfileId(sucess.data.id);
         }).catch((error) => {
             console.log(error);
         });
 
-    }, []);
+    }, [id]);
 
     if (!userProfile) {
         return (
@@ -37,34 +42,11 @@ export default function HomeUserPage() {
         );
     }
 
-    console.log(userProfile)
-
     return (
         <ContainerHomeUser>
-            <HeaderUser userProfile={userProfile} />
-
-            <ContainerPosts>
-                {userPosts.length ?
-                    userPosts.map(p => <Post post={p} />)
-                    :
-                    <Link to="/create-post">Criar primeiro post</Link>
-                }
-            </ContainerPosts>
+            <Header userProfile={userProfile} auth={auth} config={config}/>
+            <HeaderUser userProfile={userProfile} auth={auth} profileId={profileId} config={config} />
+            <ContainerPosts userPosts={userPosts} auth={auth} profileId={profileId}/>
         </ContainerHomeUser>
-    );
-}
-
-function Post({ post }) {
-    const date = dayjs(post.date);
-    const formattedDate = date.format('DD/MM/YYYY');
-    const formattedTime = date.format('HH:mm');
-    return (
-        <PostFrame>
-            <PostImage src={post.image} alt="" />
-            <PostInfo>
-                <p>{post.description}</p>
-                <p>{formattedDate} às {formattedTime}</p>
-            </PostInfo>
-        </PostFrame>
     );
 }

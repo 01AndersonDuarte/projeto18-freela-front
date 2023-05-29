@@ -24,7 +24,7 @@ export default function CreatePage() {
         formData.append('description', description);
 
         axios.post(url, formData, config).then((sucess) => {
-            navigate("/home-user");
+            navigate(`/home-user/${auth.id}`);
           }).catch((error) => {
             console.log(error);
           });

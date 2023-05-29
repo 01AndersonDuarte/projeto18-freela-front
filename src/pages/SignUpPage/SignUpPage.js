@@ -18,7 +18,7 @@ export default function SignUpPage() {
 
     useEffect(() => {
         if (auth) {
-            navigate("/home-user");
+            navigate(`/home-user/${auth.id}`);
         }
     }, [])
 
@@ -62,6 +62,7 @@ export default function SignUpPage() {
     return (
         <>
             <ContainerSign>
+                <h1>PicBook</h1>
                 <FormStyled action="/signup" method="POST" encType="multipart/form-data" onSubmit={signUp}>
                     <InputStyled
                         placeholder="Nome"

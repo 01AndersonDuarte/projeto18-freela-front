@@ -17,7 +17,7 @@ export default function SignInPage() {
 
     useEffect(() => {
         if (auth) {
-            navigate("/home-user");
+            navigate(`/home-user/${auth.id}`);
         }
     }, [])
 
@@ -33,7 +33,7 @@ export default function SignInPage() {
             .then(sucess => {
                 setRequest(false);
                 login(sucess.data);
-                navigate("/home-user");
+                navigate(`/home-user/${sucess.data.id}`);
             })
             .catch(fail => {
                 setRequest(false);
@@ -53,6 +53,7 @@ export default function SignInPage() {
     return (
         <>
             <ContainerSign>
+                <h1>PicBook</h1>
                 <FormStyled onSubmit={singIn}>
                     <InputStyled
                         placeholder="E-mail"
