@@ -43,7 +43,6 @@ export default function HeaderUser({ userProfile, auth, profileId, config }) {
             console.log(error);
         });
     }
-    console.log(open);
 
     return (
         <Container>
@@ -57,7 +56,7 @@ export default function HeaderUser({ userProfile, auth, profileId, config }) {
                     {userProfile.userProfile.name}
                     <button onClick={() => setOpen(followers)}>Seguidores</button>
                     <button onClick={() => setOpen(following)}>Seguindo</button>
-                    <button onClick={() => navigate('/create-post')}>Criar post</button>
+                    {auth.id == profileId && <button onClick={() => navigate('/create-post')}>Criar post</button>}
                 </Followers>
                 <Biography>
                     <p>{userProfile.userProfile.biography}</p>

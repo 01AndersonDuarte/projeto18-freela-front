@@ -13,8 +13,6 @@ export default function CreatePage() {
     const navigate = useNavigate();
     const config = auth && { headers: { Authorization: `Bearer ${auth.token}` } };
 
-    console.log(auth.token);
-
     function sendPost(e){
         e.preventDefault();
 

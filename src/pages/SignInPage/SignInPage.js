@@ -25,7 +25,6 @@ export default function SignInPage() {
         setRequest(true);
         setError(false);
         e.preventDefault();
-        console.log(loginData)
 
         const url = process.env.REACT_APP_SIGN_IN_URL;
 
